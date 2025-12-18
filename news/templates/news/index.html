@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsPaper</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f4f6fb;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        aside h1 {
+            margin: 0;
+            padding: 20px 0;
+            font-size: 32px;
+            text-align: center;
+            color: #333;
+        }
+
+        .alert {
+            width: 60%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(25px);
+            animation: fadeIn 0.7s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .alert h3 {
+            margin-top: 0;
+            color: #222;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 18px;
+            background: linear-gradient(135deg, #4a6cf7, #6f9bff);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #3c5cdf, #5d88e0);
+            transform: scale(1.05);
+        }
+
+        /* -----------------------------------
+           📱 Адаптивность для телефонов
+        ----------------------------------- */
+        @media (max-width: 768px) {
+            aside h1 {
+                font-size: 26px;
+                padding: 15px;
+            }
+
+            .alert {
+                width: 90%;
+                padding: 18px;
+            }
+
+            .alert h3 {
+                font-size: 20px;
+            }
+
+            .alert p {
+                font-size: 15px;
+            }
+
+            .btn {
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+        }
+
+        /* -----------------------------------
+           📱 Большие телефоны и планшеты
+        ----------------------------------- */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .alert {
+                width: 75%;
+                padding: 20px;
+            }
+
+            aside h1 {
+                font-size: 30px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <aside>
+        <h1>NEWS OF THE COLLEGE</h1>
+    </aside>
+
+    {% if news %}
+        {% for el in news %}
+            <div class="alert">
+                <h3>{{ el.title }}</h3>
+                <p>{{ el.anons }}</p>
+                <p>{{ el.date }}</p>
+                <p style="color: rgba(0,0,0,0.45);">{{ el.author }}</p>
+
+                <a href="{% url 'newsD' el.id %}" class="btn">Читать подробнее</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align:center; font-size:18px; color:#555;">
+            У вас нет записей
+        </p>
+    {% endif %}
+
+    <script>
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('mousemove', e => {
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                button.style.setProperty('--x', `${x}px`);
+                button.style.setProperty('--y', `${y}px`);
+            });
+        });
+    </script>
+</body>
+</html>
